@@ -8,7 +8,8 @@ Item{
     property alias itemT: loaderT.sourceComponent
     property alias itemB: loaderB.sourceComponent
     property alias handle: handle
-    property color backgroundColor: backgroundColor = "#fff"
+    property color backgroundColor: "#fff"
+    property color handleColor: "#888888"
 
     Item{
         id: topItem
@@ -26,18 +27,16 @@ Item{
             anchors.fill: parent
             color: backgroundColor
             clip: true
-            Layout.fillWidth: true
-            Layout.preferredHeight: 4
             Loader { id: loaderT
-                     anchors.fill: parent
+                anchors.fill: parent
             }
         }
 
     }
     Rectangle{
         id: handle
-        color: "#888888"
-        height: 6
+        color: handleColor
+        height: 4
         z: 1
         y: Math.round(container.height/2 - height/2)
         anchors.right: parent.right
@@ -45,10 +44,10 @@ Item{
         anchors.left: parent.left
         anchors.leftMargin: 0
         Layout.fillWidth: true
-        Layout.preferredHeight: 4
 
         MouseArea {
             anchors.fill: parent
+            cursorShape: Qt.SizeVerCursor
             drag.target: parent
             drag.axis: Drag.YAxis
             drag.minimumY: Math.round(container.height*0.1)
@@ -69,9 +68,8 @@ Item{
             anchors.fill: parent
             color: backgroundColor
             Layout.fillWidth: true
-            Layout.preferredHeight: 4
             Loader { id: loaderB
-                     anchors.fill: parent
+                anchors.fill: parent
             }
         }
     }

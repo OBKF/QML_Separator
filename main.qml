@@ -13,9 +13,6 @@ ApplicationWindow {
         anchors.fill: parent
         currentIndex: tabBar.currentIndex
 
-//        Page1 {
-//        }
-
         HSeparator{
             itemT: Page {
                 Label {
@@ -32,6 +29,8 @@ ApplicationWindow {
         }
 
         VSeparator{
+//            backgroundColor: "#a2a2a2"
+//            handleColor: "red"
             itemL: Page {
                 Label {
                     text: qsTr("Second page")
