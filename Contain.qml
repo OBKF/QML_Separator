@@ -1,5 +1,6 @@
 import QtQuick 2.0
-import QtQuick.Controls 2.0
+import QtQuick.Controls 2.2
+import QtQml 2.2
 
 Container {
     id: container
@@ -41,7 +42,6 @@ Container {
             leftItem.y= 0
             leftItem.height = contentItem.height
             leftItem.width = contentItem.width - (contentItem.width-Math.round(handleX+handle.width))
-            leftItem.clip = true
 
             // Right Item
             var rightItem = contentChildren[2];
@@ -49,7 +49,6 @@ Container {
             rightItem.x = handleX+handle.width
             rightItem.height = contentItem.height
             rightItem.width = contentItem.width - Math.round(handleX+handle.width)
-            rightItem.clip = true
 
         } else{
             console.error("Please insert 2 items only, more or less is not supported for the moument.")
@@ -77,7 +76,7 @@ Container {
 
     contentItem: Control {
         spacing: 10
-        padding: 10
+        padding: 20
         anchors.rightMargin: 10
         anchors.leftMargin: 10
         anchors.bottomMargin: 10
@@ -85,3 +84,28 @@ Container {
         anchors.fill: parent
     }
 }
+
+/*This is so experimentall do not touch*/
+/*
+
+      property int hSpacing: 10
+
+Component.onCompleted: {
+    var sepNbr = count-1;
+    if (sepNbr > 0){
+        for (var i=1; i<sepNbr+1; i+=2){
+            insertItem(i, seps);
+        }
+    }
+
+    var istanceX = 0;
+    for (var i in contentChildren){
+        var child = contentChildren[i];
+        child.height = parent.height
+        child.x = istanceX;
+        istanceX += child.width+hSpacing;
+    }
+}
+*/
+
+

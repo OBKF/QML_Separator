@@ -1,76 +1,86 @@
 import QtQuick 2.0
-import QtQuick.Layouts 1.1
+import QtQuick.Controls 2.0
 
-
-Item{
+Container {
     id: container
-    property alias handleY: handle.y
-    property alias itemT: loaderT.sourceComponent
-    property alias itemB: loaderB.sourceComponent
+
     property alias handle: handle
-    property color backgroundColor: "#fff"
+    property alias handleY: handle.y
     property color handleColor: "#888888"
 
-    Item{
-        id: topItem
-        anchors.right: parent.right
-        anchors.rightMargin: 0
-        anchors.left: parent.left
-        anchors.leftMargin: 0
-        anchors.top: parent.top
-        anchors.topMargin: 0
-        Layout.fillWidth: true
-        x: 0
-        y: 0
-        height: container.height - (container.height-Math.round(handle.y+handle.height))
-        Rectangle{
-            anchors.fill: parent
-            color: backgroundColor
-            clip: true
-            Loader { id: loaderT
-                anchors.fill: parent
-            }
-        }
-
-    }
-    Rectangle{
+    property Item separator: Rectangle{
         id: handle
         color: handleColor
+        width: contentItem.width
         height: 4
+        x: 0
+        y: Math.round(contentItem.height/2 - height/2)
         z: 1
-        y: Math.round(container.height/2 - height/2)
-        anchors.right: parent.right
-        anchors.rightMargin: 0
-        anchors.left: parent.left
-        anchors.leftMargin: 0
-        Layout.fillWidth: true
-
         MouseArea {
+            id: handleMA
             anchors.fill: parent
             cursorShape: Qt.SizeVerCursor
             drag.target: parent
             drag.axis: Drag.YAxis
-            drag.minimumY: Math.round(container.height*0.1)
-            drag.maximumY: (container.height*0.9 - parent.height)
+            drag.minimumY: Math.round(contentItem.height*0.1)
+            drag.maximumY: Math.round(contentItem.height*0.9 - parent.height)
         }
     }
-    Item{
-        id: buttomItem
-        anchors.right: parent.right
-        anchors.rightMargin: 0
-        anchors.left: parent.left
-        anchors.leftMargin: 0
-        Layout.fillWidth: true
-        x: 0
-        y: container.height-height
-        height: container.height - Math.round(handle.y+handle.height)
-        Rectangle{
-            anchors.fill: parent
-            color: backgroundColor
-            Layout.fillWidth: true
-            Loader { id: loaderB
-                anchors.fill: parent
-            }
+
+    // Set the initial states
+    Component.onCompleted: {
+        if (count === 2){
+            // Inserting the separator
+            insertItem(1, separator);
+
+            // Make the items interact with the hanle
+            //---------------------------------------
+            // Top Item
+            var topItem = contentChildren[0];
+            topItem.x= 0
+            topItem.y= 0
+            topItem.width = contentItem.width
+            topItem.height = contentItem.height - (contentItem.height-Math.round(handleY+handle.height))
+            topItem.clip = true
+
+            // Bottom Item
+            var bottomItem = contentChildren[2];
+            bottomItem.x = 0;
+            bottomItem.y = handleY+handle.height
+            bottomItem.width = contentItem.width
+            bottomItem.height = contentItem.height - Math.round(handleY+handle.height)
+            bottomItem.clip = true
+        } else{
+            console.error("Please insert 2 items only, more or less is not supported for the moument.")
         }
+    }
+
+    Binding {
+          target: contentChildren[0]
+          property: 'height'
+          value: contentItem.height - (contentItem.height-Math.round(handleY+handle.height))
+          when: handleMA.drag.active
+      }
+    Binding {
+          target: contentChildren[2]
+          property: 'y'
+          value: handleY+handle.height
+          when: handleMA.drag.active
+      }
+    Binding {
+          target: contentChildren[2]
+          property: 'height'
+          value: contentItem.height - Math.round(handleY+handle.height)
+          when: handleMA.drag.active
+      }
+
+    contentItem: Control {
+        spacing: 10
+        padding: 10
+        anchors.rightMargin: 10
+        anchors.leftMargin: 10
+        anchors.bottomMargin: 10
+        anchors.topMargin: 10
+        anchors.fill: parent
     }
 }

@@ -6,5 +6,6 @@
         <file>qtquickcontrols2.conf</file>
         <file>HSeparator.qml</file>
         <file>VSeparator.qml</file>
+        <file>Contain.qml</file>
     </qresource>
 </RCC>
